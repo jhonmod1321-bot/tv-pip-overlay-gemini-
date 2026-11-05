@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000"
+    android:padding="4dp">
+
+    <!-- Aquí puedes colocar un WebView, un reproductor de video o la vista multimedia -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PiP Recuadro"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/btnCloseOverlay"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@android:drawable/ic_menu_close_clear_cancel"
+        android:layout_gravity="top|end"
+        android:focusable="true"/>
+
+</FrameLayout>
