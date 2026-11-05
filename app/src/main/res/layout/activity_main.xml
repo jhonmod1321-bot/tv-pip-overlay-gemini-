@@ -4,23 +4,13 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#121212"
     android:padding="32dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Control de PiP / Ventana Flotante Android TV"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:layout_marginBottom="24dp"/>
-
     <Button
-        android:id="@+id/btnStartService"
+        android:id="@+id/startOverlayButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:text="Lanzar Ventana Flotante"
-        android:textSize="18sp"/>
+        android:text="Iniciar Superposición"
+        android:textSize="18sp" />
 
 </LinearLayout>
