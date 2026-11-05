@@ -17,38 +17,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Verificar permiso para dibujar sobre otras apps
-        checkOverlayPermission();
-
-        Button btnStartService = findViewById(R.id.btnStartService);
-        btnStartService.setOnClickListener(v -> {
-            if (Settings.CanDrawOverlays(this)) {
-                Intent serviceIntent = new Intent(this, OverlayService.class);
-                // Puedes pasar aquí el paquete de la app que deseas mostrar en miniatura
-                serviceIntent.putExtra("package_name", "com.retroarch"); // Ejemplo con RetroArch
-                startForegroundService(serviceIntent);
-                Toast.makeText(this, "Iniciando modo flotante...", Toast.LENGTH_SHORT).show();
-                finish(); // Cierra la UI principal para dejar la app de fondo
-            } else {
-                checkOverlayPermission();
-            }
-        });
+        Button startButton = findViewById(R.id.startOverlayButton);
+        if (startButton != null) {
+            startButton.setOnClickListener(v -> checkOverlayPermissionAndStart());
+        }
     }
 
-    private void checkOverlayPermission() {
-        if (!Settings.CanDrawOverlays(this)) {
+    private void checkOverlayPermissionAndStart() {
+        if (!Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+        } else {
+            startOverlayService();
         }
+    }
+
+    private void startOverlayService() {
+        Intent serviceIntent = new Intent(this, OverlayService.class);
+        startService(serviceIntent);
+        Toast.makeText(this, "Iniciando servicio de superposición...", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
-            if (!Settings.CanDrawOverlays(this)) {
-                Toast.makeText(this, "El permiso de superposición es necesario para Android TV.", Toast.LENGTH_LONG).show();
+            if (Settings.canDrawOverlays(this)) {
+                startOverlayService();
+            } else {
+                Toast.makeText(this, "Permiso de superposición denegado", Toast.LENGTH_SHORT).show();
             }
         }
     }
