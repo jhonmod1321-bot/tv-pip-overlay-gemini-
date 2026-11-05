@@ -8,12 +8,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.Button;
 
 public class OverlayService extends Service {
 
     private WindowManager windowManager;
-    private View floatingView;
+    private View overlayView;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -21,50 +21,48 @@ public class OverlayService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (floatingView == null) {
-            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+    public void onCreate() {
+        super.onCreate();
+        
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
-            // Inflar el diseño de la ventana flotante en miniatura
-            LayoutInflater inflater = LayoutInflater.from(this);
-            floatingView = inflater.inflate(R.layout.overlay_layout, null);
+        // Crear una vista flotante sencilla para comprobar la superposición
+        LayoutInflater inflater = LayoutInflater.from(this);
+        overlayView = inflater.inflate(R.layout.overlay_layout, null);
 
-            // Configuración de los parámetros de la ventana flotante para Android
-            int layoutParamsType;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                layoutParamsType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-            } else {
-                layoutParamsType = WindowManager.LayoutParams.TYPE_PHONE;
-            }
-
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                    400, // Ancho de la miniatura en píxeles
-                    300, // Alto de la miniatura en píxeles
-                    layoutParamsType,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, // Permite interactuar con la app de atrás si se desea
-                    PixelFormat.TRANSLUCENT
-            );
-
-            // Posicionar en la esquina superior derecha
-            params.gravity = Gravity.TOP | Gravity.END;
-            params.x = 50;
-            params.y = 50;
-
-            windowManager.addView(floatingView, params);
-
-            // Botón para cerrar la ventana flotante desde el propio layout flotante
-            floatingView.findViewById(R.id.btnCloseOverlay).setOnClickListener(v -> stopSelf());
+        int LAYOUT_FLAG;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
         }
 
-        return START_STICKY;
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                LAYOUT_FLAG,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+        );
+
+        params.gravity = Gravity.TOP | Gravity.START;
+        params.x = 100;
+        params.y = 100;
+
+        // Botón dentro de la superposición para cerrar el servicio
+        Button closeButton = overlayView.findViewById(R.id.closeOverlayButton);
+        if (closeButton != null) {
+            closeButton.setOnClickListener(v -> stopSelf());
+        }
+
+        windowManager.addView(overlayView, params);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (floatingView != null && windowManager != null) {
-            windowManager.removeView(floatingView);
-            floatingView = null;
+        if (overlayView != null && windowManager != null) {
+            windowManager.removeView(overlayView);
         }
     }
 }
