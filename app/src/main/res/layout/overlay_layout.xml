@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#80000000"
-    android:padding="4dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#AA000000"
+    android:orientation="vertical"
+    android:padding="12px">
 
-    <!-- Aquí puedes colocar un WebView, un reproductor de video o la vista multimedia -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PiP Recuadro"
+        android:text="TV PiP Activo"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:layout_gravity="center"/>
+        android:textSize="14sp" />
 
     <Button
-        android:id="@+id/btnCloseOverlay"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@android:drawable/ic_menu_close_clear_cancel"
-        android:layout_gravity="top|end"
-        android:focusable="true"/>
+        android:id="@+id/closeOverlayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar"
+        android:textSize="12sp" />
 
-</FrameLayout>
+</LinearLayout>
