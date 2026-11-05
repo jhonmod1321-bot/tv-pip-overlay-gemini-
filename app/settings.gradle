@@ -12,5 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "p-l-p"
+
+rootProject.name = "tv-pip-overlay-gemini"
 include ':app'
